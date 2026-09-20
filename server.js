@@ -14,6 +14,7 @@ const connectDB = require('./src/config/db.js');
 
 // Route imports
 const authRoutes = require('./src/routes/authRoutes');
+const jobRoutes = require('./src/routes/jobRoutes');
 
 // 3. Create the express app
 const app = express();
@@ -32,27 +33,28 @@ app.use(morgan('dev'));
 // Parses incoming JSON body — without this, req.body is undefined
 app.use(express.json());
 
-// --- ROUTES (we'll add these in later stages) ---
+// --- ROUTES ---
 app.get('/', (req, res) => {
-    res.json({ message: 'Job Board API is running ✓' });
+  res.json({ message: 'Job Board API is running ✓' });
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/jobs', jobRoutes);
 
 // --- ERROR HANDLER (always last) ---
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(err.statusCode || 500).json({
-        success: false,
-        message: err.message || 'Something went wrong',
-    });
+  console.error(err.stack);
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || 'Something went wrong',
+  });
 });
 
 // --- CONNECT TO DATABASE THEN START SERVER ---
 const PORT = process.env.PORT || 5000;
 
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
-    });
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+  });
 });

@@ -29,6 +29,43 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    profession: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    savedJobs: [
+      {
+        job: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Job',
+        },
+        savedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        isDeleted: {
+          type: Boolean,
+          default: false,
+        },
+        deletedAt: {
+          type: Date,
+          default: null,
+        },
+      },
+    ],
+    recentlyViewed: [
+      {
+        job: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Job',
+        },
+        viewedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
